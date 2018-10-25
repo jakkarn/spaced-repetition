@@ -206,7 +206,11 @@ function rehearse-todo-all
         for path in $(rhrs_dir)*; do
             name=${path##*/} #remove longest matching prefix substring
             if [ -f $path ]; then
-                echo "$name - rehearse following:" # header for each day
+                if [ $name = $(today) ]; then
+                    echo "$name - rehearse following: <- TODAY"
+                else
+                    echo "$name - rehearse following:" # header for each day
+                fi
                 while read line; do
                     descr=${line##*;}       # remove all prefixes with '*;'
                     startdate=${line%%;*}   # remove all suffixes with ';*'
