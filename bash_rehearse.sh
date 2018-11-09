@@ -18,7 +18,7 @@ function rehearse-get-diff
 ## get how many days from start-date next interval is
 function rehearse-get-interval
 {
-    array=(0 1 3 7 14 30 50 100 200 365 730 1500 3000 5000 10000)
+    array=(0 1 4 11 25 55 115 235 560 1001 1501 3001 5001 10001)
 
     if (( $# != 1 )); then
         echo "Usage:  ${FUNCNAME[0]} <days>"
@@ -88,7 +88,7 @@ function rehearse-add
                     # create new rehearsal date
                     echo $new_entry > `echo "$(rhrs_dir)$(today)"`
                 fi
-                rehearse-update # important update
+                #rehearse-update
                 echo "added \"$1: $2\" for rehearsal"
             else
                 echo "Don't add it again!"
@@ -106,8 +106,15 @@ function rehearse-add
     fi
 }
 
-## remove emptty files
+## run update twice, cause have everything integrated in one loop :3
 function rehearse-update
+{
+    rehearse-update-single
+    rehearse-update-single
+}
+
+## move dates to correct date, remove empty files
+function rehearse-update-single
 {
     for path in $(rhrs_dir)*; do
 
@@ -145,7 +152,7 @@ function rehearse-update
 
                         cat $(rhrs_dir)temp1 > $(rhrs_dir)temp0
 
-                        lines=`wc -l < 'temp0'` # removed one line
+                        lines=`wc -l < $(rhrs_dir)'temp0'` # removed one line
                         line_nr=$(($line_nr-1)) # removed one line
                     fi
                     line_nr=$(($line_nr+1))     # increment line-counter
